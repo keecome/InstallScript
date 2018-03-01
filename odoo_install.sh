@@ -17,8 +17,8 @@
 ##fixed parameters
 #odoo
 OE_USER="odoo"
-OE_HOME="/$OE_USER"
-OE_HOME_EXT="/$OE_USER/${OE_USER}-server"
+OE_HOME="/data/$OE_USER"
+OE_HOME_EXT="/data/$OE_USER/${OE_USER}-server"
 #The default port where this Odoo instance will run under (provided you use the command -c in the terminal)
 #Set to true if you want to install it, false if you don't need it or have it already installed.
 INSTALL_WKHTMLTOPDF="True"
@@ -31,7 +31,7 @@ OE_VERSION="10.0"
 IS_ENTERPRISE="False"
 #set the superadmin password
 OE_SUPERADMIN="admin"
-OE_CONFIG="${OE_USER}-server"
+OE_CONFIG="${OE_USER}"
 
 ##
 ###  WKHTMLTOPDF download links
@@ -52,7 +52,13 @@ sudo apt-get upgrade -y
 # Install PostgreSQL Server
 #--------------------------------------------------
 echo -e "\n---- Install PostgreSQL Server ----"
-sudo apt-get install postgresql -y
+#sudo apt-get install postgresql -y
+sudo apt-get install software-properties-common python-software-properties -y
+sudo add-apt-repository "deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main"
+wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install postgresql postgresql-contrib postgresql-client -y
+
 
 echo -e "\n---- Creating the ODOO PostgreSQL User  ----"
 sudo su - postgres -c "createuser -s $OE_USER" 2> /dev/null || true
@@ -73,6 +79,10 @@ echo -e "\n--- Install other required packages"
 sudo apt-get install node-clean-css -y
 sudo apt-get install node-less -y
 sudo apt-get install python-gevent -y
+
+echo -e "\n---- install zh_cn fonts ----"
+sudo apt-get install ttf-wqy-zenhei -y
+sudo apt-get install ttf-wqy-microhei -y
 
 #--------------------------------------------------
 # Install Wkhtmltopdf if needed
@@ -220,7 +230,7 @@ start-stop-daemon --stop --quiet --pidfile \$PIDFILE \
 echo "\${NAME}."
 ;;
 
-restart|force-reload)
+restart|reload)
 echo -n "Restarting \${DESC}: "
 start-stop-daemon --stop --quiet --pidfile \$PIDFILE \
 --oknodo
@@ -232,7 +242,7 @@ echo "\${NAME}."
 ;;
 *)
 N=/etc/init.d/\$NAME
-echo "Usage: \$NAME {start|stop|restart|force-reload}" >&2
+echo "Usage: \$NAME {start|stop|restart|reload}" >&2
 exit 1
 ;;
 
