@@ -27,3 +27,7 @@ sudo chmod +x odoo_install.sh
 ```
 sudo ./odoo_install.sh
 ```
+##### 4. Execute the script:
+```
+#sudo service odoo stop|start|reload 
+```
