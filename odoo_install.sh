@@ -84,6 +84,8 @@ echo -e "\n--- Install other required packages"
 sudo apt-get install node-clean-css -y
 sudo apt-get install node-less -y
 sudo apt-get install python-gevent -y
+sudo pip3 install phonenumbers
+sudo pip3 install num2words ofxparse
 
 echo -e "\n---- install zh_cn fonts ----"
 sudo apt-get install ttf-wqy-zenhei -y
